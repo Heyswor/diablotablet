@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import levelsData from "../../levels.json";
+import css from "./LevelCalculator.module.css";
 
 const LevelCalculator = () => {
   const [startLevel, setStartLevel] = useState("");
@@ -34,6 +35,13 @@ const LevelCalculator = () => {
     const start = parseInt(startLevel, 10);
     const end = parseInt(endLevel, 10);
 
+    const requiredExperienceFormatted = requiredExperience.toLocaleString();
+    const requiredTimeFormatted = requiredTime.toLocaleString();
+
+    setRequiredExperience(requiredExperienceFormatted);
+    setRequiredTime(requiredTimeFormatted);
+    setErrorMessage("");
+
     if (
       start <= end &&
       start >= 1 &&
@@ -56,9 +64,9 @@ const LevelCalculator = () => {
       const hours = Math.floor(requiredMinutes / 60);
       const minutes = requiredMinutes % 60;
 
-      const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+      const formattedTime = `${hours.toString().padStart(2, "0")}h ${minutes
         .toString()
-        .padStart(2, "0")}`;
+        .padStart(2, "0")}m`;
 
       setRequiredExperience(requiredExperience);
       setRequiredTime(formattedTime);
@@ -66,7 +74,7 @@ const LevelCalculator = () => {
     } else {
       setRequiredExperience("");
       setRequiredTime("");
-      setErrorMessage("Заполните все поля");
+      setErrorMessage("Fill in all the fields");
     }
   };
 
@@ -76,61 +84,72 @@ const LevelCalculator = () => {
 
   return (
     <div>
-      <h2>Level Calculator</h2>
-      <div>
-        <label>
-          Start Level:
-          <input
-            type="number"
-            value={startLevel}
-            onChange={handleStartLevelChange}
-          />
-        </label>
-        <label>
-          End Level:
-          <input
-            type="number"
-            value={endLevel}
-            onChange={handleEndLevelChange}
-          />
-        </label>
-        <label>
-          Time Interval (minutes):
-          <input
-            type="number"
-            value={timeInterval}
-            onChange={handleTimeIntervalChange}
-          />
-        </label>
-        <label>
-          Experience per Time:
-          <input
-            type="number"
-            value={experiencePerTime}
-            onChange={handleExperiencePerTimeChange}
-          />
-        </label>
-      </div>
+      <header>
+        <h2 className={css.header}>Diablo 4 Level Calculator</h2>
+      </header>
+      <main className={css.main}>
+        <div className={css.calcBody}>
+          <label className={css.calcLabel}>
+            Start Level:
+            <input
+              type="number"
+              value={startLevel}
+              onChange={handleStartLevelChange}
+              className={css.calcInput}
+            />
+          </label>
+          <label className={css.calcLabel}>
+            End Level:
+            <input
+              type="number"
+              value={endLevel}
+              onChange={handleEndLevelChange}
+              className={css.calcInput}
+            />
+          </label>
 
-      {errorMessage && (
-        <div>
-          <p>{errorMessage}</p>
+          <label className={css.calcLabel}>
+            Time Interval (minutes):
+            <input
+              type="number"
+              value={timeInterval}
+              onChange={handleTimeIntervalChange}
+              className={css.calcInput}
+            />
+          </label>
+          <label className={css.calcLabel}>
+            Experience per Time:
+            <input
+              type="number"
+              value={experiencePerTime}
+              onChange={handleExperiencePerTimeChange}
+              className={css.calcInput}
+            />
+          </label>
         </div>
-      )}
+        <div className={css.info}>
+          {errorMessage && (
+            <div className={css.infoError}>
+              <p>{errorMessage}</p>
+            </div>
+          )}
+          <div className={css.infoResult}>
+            {requiredExperience && (
+              <div className={css.infoResultBlock}>
+                <h3>Required Experience:</h3>
+                <p>{requiredExperience.toLocaleString()}</p>
+              </div>
+            )}
 
-      {requiredExperience && (
-        <div>
-          <h3>Required Experience:</h3>
-          <p>{requiredExperience}</p>
+            {requiredTime && (
+              <div className={css.infoResultBlock}>
+                <h3>Required Time:</h3>
+                <p>{requiredTime.toLocaleString()} </p>
+              </div>
+            )}
+          </div>
         </div>
-      )}
-
-      {requiredTime && (
-        <div>
-          <h3>Required Time:</h3>
-          <p>{requiredTime} (часов:минут)</p>
-        </div>
-      )}
+      </main>
     </div>
   );
 };
