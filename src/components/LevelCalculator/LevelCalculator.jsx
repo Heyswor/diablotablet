@@ -128,25 +128,16 @@ const LevelCalculator = () => {
           </label>
         </div>
         <div className={css.info}>
-          {errorMessage && (
-            <div className={css.infoError}>
-              <p>{errorMessage}</p>
-            </div>
-          )}
           <div className={css.infoResult}>
-            {requiredExperience && (
-              <div className={css.infoResultBlock}>
-                <h3>Required Experience:</h3>
-                <p>{requiredExperience.toLocaleString()}</p>
-              </div>
-            )}
+            <div className={css.infoResultBlock}>
+              <h3>
+                Required Experience: {requiredExperience.toLocaleString()}
+              </h3>
+            </div>
 
-            {requiredTime && (
-              <div className={css.infoResultBlock}>
-                <h3>Required Time:</h3>
-                <p>{requiredTime.toLocaleString()} </p>
-              </div>
-            )}
+            <div className={css.infoResultBlock}>
+              <h3>Required Time: {requiredTime.toLocaleString()}</h3>
+            </div>
           </div>
         </div>
       </main>

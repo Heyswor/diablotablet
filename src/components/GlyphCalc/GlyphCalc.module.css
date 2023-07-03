@@ -1,0 +1,70 @@
+.header {
+  background-color: rgb(22, 19, 19);
+  height: 50px;
+  width: 100vw;
+  color: rgb(122, 4, 4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calcBody {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.calcLabel {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.calcInput {
+  width: 300px;
+  height: 30px;
+}
+
+.calcLabel input {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 18px;
+}
+
+.info {
+  display: flex;
+}
+
+.infoError {
+  font-size: 24px;
+  color: RED;
+  text-transform: uppercase;
+}
+
+.infoResult {
+  display: flex;
+  flex-direction: column;
+  font-size: 30px;
+  align-items: center;
+  justify-content: center;
+}
+
+.infoResultBlock {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+h3 {
+    font-size: 40px;
+}
