@@ -7,7 +7,11 @@ function App() {
   return (
     <div>
       <nav>
-        <NavLink to="/" className="navLink" activeClassName="active">
+        <NavLink
+          to="/diablotablet/"
+          className="navLink"
+          activeClassName="active"
+        >
           LevelCalculator
         </NavLink>
         <NavLink to="/glyphcalc" className="navLink" activeClassName="active">
