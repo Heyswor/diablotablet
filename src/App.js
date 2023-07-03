@@ -8,7 +8,7 @@ function App() {
     <div>
       <nav>
         <NavLink
-          to="/diablotablet/"
+          to="/diablotablet"
           className="navLink"
           activeClassName="active"
         >
@@ -19,7 +19,7 @@ function App() {
         </NavLink>
       </nav>
       <Routes>
-        <Route path="/" element={<LevelCalculator />} />
+        <Route path="/diablotablet" element={<LevelCalculator />} />
         <Route path="/glyphcalc" element={<GlyphCalc />} />
       </Routes>
     </div>
