@@ -10,22 +10,20 @@ import {
 
 function App() {
   return (
-    <Router basename="/diablotablet">
-      <div>
-        <nav>
-          <NavLink to="/" className="navLink" activeClassName="active">
-            LevelCalculator
-          </NavLink>
-          <NavLink to="/glyphcalc" className="navLink" activeClassName="active">
-            Glyph Calculator
-          </NavLink>
-        </nav>
-        <Routes>
-          <Route path="/" element={<LevelCalculator />} />
-          <Route path="/glyphcalc" element={<GlyphCalc />} />
-        </Routes>
-      </div>
-    </Router>
+    <div>
+      <nav>
+        <NavLink to="/" className="navLink" activeClassName="active">
+          LevelCalculator
+        </NavLink>
+        <NavLink to="/glyphcalc" className="navLink" activeClassName="active">
+          Glyph Calculator
+        </NavLink>
+      </nav>
+      <Routes>
+        <Route path="/" element={<LevelCalculator />} />
+        <Route path="/glyphcalc" element={<GlyphCalc />} />
+      </Routes>
+    </div>
   );
 }
 
