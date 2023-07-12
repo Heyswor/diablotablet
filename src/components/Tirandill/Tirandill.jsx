@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import OrderForm from "../Tirandill/TabletComponent/infotablet";
+import css from "./Tirandill.module.css";
 
 const Tirandill = () => {
   const [username, setUsername] = useState("");
@@ -42,30 +43,33 @@ const Tirandill = () => {
   };
 
   return (
-    <div>
+    <div className={css.tirBlock}>
       {isLoggedIn ? (
-        <div>
-          <h1>Добро пожаловать!</h1>
-          <button onClick={handleLogout}>Выйти</button>
+        <div className={css.tirBlock}>
+          <h1 className={css.header}>Wellcome, Master!</h1>
+          <form className={css.blockForm}>
+            <button onClick={handleLogout}>Exit</button>
+          </form>
+
           <OrderForm />
         </div>
       ) : (
         <div>
-          <h1>Вход</h1>
-          <form onSubmit={handleLogin}>
+          <h1 className={css.header}>Login</h1>
+          <form onSubmit={handleLogin} className={css.blockForm}>
             <input
               type="text"
-              placeholder="Логин"
+              placeholder="login"
               value={username}
               onChange={handleUsernameChange}
             />
             <input
               type="password"
-              placeholder="Пароль"
+              placeholder="password"
               value={password}
               onChange={handlePasswordChange}
             />
-            <button type="submit">Войти</button>
+            <button type="submit">Login</button>
           </form>
         </div>
       )}

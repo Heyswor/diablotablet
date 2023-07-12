@@ -18,3 +18,12 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
 }
+
+button {
+  font-family: "Diablo", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: transparent;
+  border-radius: 10px;
+  
+}

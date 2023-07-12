@@ -6,6 +6,7 @@ const Tablet = () => {
   const [levelRange, setLevelRange] = useState("");
   const [executor, setExecutor] = useState("");
   const [price, setPrice] = useState("");
+  const [selfplayPilot, setSelfplayPilot] = useState("");
 
   const handleOrderNumberChange = (event) => {
     setOrderNumber(event.target.value);
@@ -27,6 +28,10 @@ const Tablet = () => {
     setPrice(event.target.value);
   };
 
+  const handleSelfplayPilot = (event) => {
+    setSelfplayPilot(event.target.value);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -37,6 +42,7 @@ const Tablet = () => {
       levelRange,
       executor,
       price,
+      selfplayPilot,
     };
 
     console.log(formData);
@@ -57,7 +63,7 @@ const Tablet = () => {
           />
         </div>
         <div>
-          <label htmlFor="clientName">Имя клиента:</label>
+          <label htmlFor="clientName">Booster:</label>
           <input
             type="text"
             id="clientName"
@@ -65,17 +71,9 @@ const Tablet = () => {
             onChange={handleClientNameChange}
           />
         </div>
+
         <div>
-          <label htmlFor="levelRange">Диапазон уровней:</label>
-          <input
-            type="text"
-            id="levelRange"
-            value={levelRange}
-            onChange={handleLevelRangeChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="executor">Исполнитель:</label>
+          <label htmlFor="executor">Цена для бустера:</label>
           <input
             type="text"
             id="executor"
@@ -84,12 +82,30 @@ const Tablet = () => {
           />
         </div>
         <div>
-          <label htmlFor="price">Цена:</label>
+          <label htmlFor="price">Стоимость:</label>
           <input
             type="text"
             id="price"
             value={price}
             onChange={handlePriceChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="levelRange">level:</label>
+          <input
+            type="text"
+            id="levelRange"
+            value={levelRange}
+            onChange={handleLevelRangeChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="levelRange">Selfplay/Pilot:</label>
+          <input
+            type="text"
+            id="SelfplayPilot"
+            value={selfplayPilot}
+            onChange={handleSelfplayPilot}
           />
         </div>
         <button type="submit">Отправить</button>

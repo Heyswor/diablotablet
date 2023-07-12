@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import css from "./Tablet.module.css"
+import css from "./Tablet.module.css";
 
 const OrderForm = () => {
   const [orderNumber, setOrderNumber] = useState("");
-  const [clientName, setClientName] = useState("");
+  const [booster, setBooster] = useState("");
   const [levelRange, setLevelRange] = useState("");
-  const [executor, setExecutor] = useState("");
+  const [priceForBooster, setPriceForBooster] = useState("");
   const [price, setPrice] = useState("");
+  const [selfplayPilot, setSelfplayPilot] = useState("");
   const [orders, setOrders] = useState(() => {
     const savedOrders = localStorage.getItem("orders");
     return savedOrders ? JSON.parse(savedOrders) : [];
@@ -20,20 +21,24 @@ const OrderForm = () => {
     setOrderNumber(event.target.value);
   };
 
-  const handleClientNameChange = (event) => {
-    setClientName(event.target.value);
+  const handleBoosterChange = (event) => {
+    setBooster(event.target.value);
   };
 
   const handleLevelRangeChange = (event) => {
     setLevelRange(event.target.value);
   };
 
-  const handleExecutorChange = (event) => {
-    setExecutor(event.target.value);
+  const handlePriceForBoosterChange = (event) => {
+    setPriceForBooster(event.target.value);
   };
 
   const handlePriceChange = (event) => {
     setPrice(event.target.value);
+  };
+
+  const handleSelfplayPilot = (event) => {
+    setSelfplayPilot(event.target.value);
   };
 
   const handleSubmit = (event) => {
@@ -41,20 +46,22 @@ const OrderForm = () => {
 
     const newOrder = {
       orderNumber,
-      clientName,
+      booster,
       levelRange,
-      executor,
+      priceForBooster,
       price,
+      selfplayPilot,
       completed: false,
     };
 
     setOrders([...orders, newOrder]);
 
     setOrderNumber("");
-    setClientName("");
+    setBooster("");
     setLevelRange("");
-    setExecutor("");
+    setPriceForBooster("");
     setPrice("");
+    setSelfplayPilot("");
   };
 
   const handleComplete = (index) => {
@@ -70,11 +77,11 @@ const OrderForm = () => {
   };
 
   return (
-    <div>
-      <h1>Форма заказа</h1>
-      <form onSubmit={handleSubmit}>
+    <div className={css.orderBlock}>
+      <h1>Order Form</h1>
+      <form onSubmit={handleSubmit} className={css.orderForm}>
         <div>
-          <label htmlFor="orderNumber">№ Заказа:</label>
+          <label htmlFor="orderNumber">Order number:</label>
           <input
             type="text"
             id="orderNumber"
@@ -83,16 +90,35 @@ const OrderForm = () => {
           />
         </div>
         <div>
-          <label htmlFor="clientName">Имя клиента:</label>
+          <label htmlFor="booster">Booster:</label>
           <input
             type="text"
-            id="clientName"
-            value={clientName}
-            onChange={handleClientNameChange}
+            id="booster"
+            value={booster}
+            onChange={handleBoosterChange}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="priceForBooster">Price for a booster:</label>
+          <input
+            type="text"
+            id="priceForBooster"
+            value={priceForBooster}
+            onChange={handlePriceForBoosterChange}
           />
         </div>
         <div>
-          <label htmlFor="levelRange">Диапазон уровней:</label>
+          <label htmlFor="price">Price:</label>
+          <input
+            type="text"
+            id="price"
+            value={price}
+            onChange={handlePriceChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="levelRange">Level:</label>
           <input
             type="text"
             id="levelRange"
@@ -101,49 +127,45 @@ const OrderForm = () => {
           />
         </div>
         <div>
-          <label htmlFor="executor">Исполнитель:</label>
+          <label htmlFor="selfplayPilot">Selfplay/Pilot:</label>
           <input
             type="text"
-            id="executor"
-            value={executor}
-            onChange={handleExecutorChange}
+            id="selfplayPilot"
+            value={selfplayPilot}
+            onChange={handleSelfplayPilot}
           />
         </div>
-        <div>
-          <label htmlFor="price">Цена:</label>
-          <input
-            type="text"
-            id="price"
-            value={price}
-            onChange={handlePriceChange}
-          />
-        </div>
-        <button type="submit">Добавить заказ</button>
+        <button type="submit">Send</button>
       </form>
 
       {orders.length > 0 && (
         <div>
-          <h2>Таблица заказов</h2>
+          <h2>Orders</h2>
           <table>
             <thead>
               <tr>
-                <th>№ Заказа</th>
-                <th>Имя клиента</th>
-                <th>Диапазон уровней</th>
-                <th>Исполнитель</th>
-                <th>Цена</th>
-                <th>Выполнено</th>
-                <th>Удалить</th>
+                <th>Order number</th>
+                <th>Booster </th>
+                <th>Price for a booster</th>
+                <th>Price</th>
+                <th>Level</th>
+                <th>Selfplay/Pilot:</th>
+                <th>Completed</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody>
               {orders.map((order, index) => (
-                <tr key={index} className={order.completed ? css.completed : ""}>
+                <tr
+                  key={index}
+                  className={order.completed ? css.completed : ""}
+                >
                   <td>{order.orderNumber}</td>
-                  <td>{order.clientName}</td>
-                  <td>{order.levelRange}</td>
-                  <td>{order.executor}</td>
+                  <td>{order.booster}</td>
+                  <td>{order.priceForBooster}</td>
                   <td>{order.price}</td>
+                  <td>{order.levelRange}</td>
+                  <td>{order.selfplayPilot}</td>
                   <td>
                     <input
                       type="checkbox"
@@ -152,7 +174,7 @@ const OrderForm = () => {
                     />
                   </td>
                   <td>
-                    <button onClick={() => handleDelete(index)}>Удалить</button>
+                    <button onClick={() => handleDelete(index)}>Delete</button>
                   </td>
                 </tr>
               ))}
