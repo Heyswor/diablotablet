@@ -42,9 +42,9 @@ const OrderForm = () => {
     setSelfplayPilot(event.target.value);
   };
 
-   const handleCommentary = (event) => {
-     setCommentary(event.target.value);
-   };
+  const handleCommentary = (event) => {
+    setCommentary(event.target.value);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
