@@ -8,6 +8,7 @@ const OrderForm = () => {
   const [priceForBooster, setPriceForBooster] = useState("");
   const [price, setPrice] = useState("");
   const [selfplayPilot, setSelfplayPilot] = useState("");
+  const [commentary, setCommentary] = useState("");
   const [orders, setOrders] = useState(() => {
     const savedOrders = localStorage.getItem("orders");
     return savedOrders ? JSON.parse(savedOrders) : [];
@@ -41,6 +42,10 @@ const OrderForm = () => {
     setSelfplayPilot(event.target.value);
   };
 
+   const handleCommentary = (event) => {
+     setCommentary(event.target.value);
+   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -51,6 +56,7 @@ const OrderForm = () => {
       priceForBooster,
       price,
       selfplayPilot,
+      commentary,
       completed: false,
     };
 
@@ -62,6 +68,7 @@ const OrderForm = () => {
     setPriceForBooster("");
     setPrice("");
     setSelfplayPilot("");
+    setCommentary("");
   };
 
   const handleComplete = (index) => {
@@ -133,6 +140,15 @@ const OrderForm = () => {
             id="selfplayPilot"
             value={selfplayPilot}
             onChange={handleSelfplayPilot}
+          />
+        </div>
+        <div>
+          <label htmlFor="commentary">Commentary:</label>
+          <input
+            type="text"
+            id="commentary"
+            value={commentary}
+            onChange={setCommentary}
           />
         </div>
         <button type="submit">Send</button>
