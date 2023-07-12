@@ -7,6 +7,7 @@ const Tablet = () => {
   const [executor, setExecutor] = useState("");
   const [price, setPrice] = useState("");
   const [selfplayPilot, setSelfplayPilot] = useState("");
+  
 
   const handleOrderNumberChange = (event) => {
     setOrderNumber(event.target.value);

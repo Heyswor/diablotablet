@@ -148,7 +148,7 @@ const OrderForm = () => {
             type="text"
             id="commentary"
             value={commentary}
-            onChange={setCommentary}
+            onChange={handleCommentary}
           />
         </div>
         <button type="submit">Send</button>
@@ -166,6 +166,7 @@ const OrderForm = () => {
                 <th>Price</th>
                 <th>Level</th>
                 <th>Selfplay/Pilot:</th>
+                <th>Commentary</th>
                 <th>Completed</th>
                 <th>Delete</th>
               </tr>
@@ -182,6 +183,7 @@ const OrderForm = () => {
                   <td>{order.price}</td>
                   <td>{order.levelRange}</td>
                   <td>{order.selfplayPilot}</td>
+                  <td>{order.commentary}</td>
                   <td>
                     <input
                       type="checkbox"
