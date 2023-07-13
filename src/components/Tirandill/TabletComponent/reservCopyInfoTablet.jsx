@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import css from "./Tablet.module.css";
 
-import "firebase/compat/firestore";
-import db from "../../../services/firebase";
-
 const OrderForm = () => {
   const [orderNumber, setOrderNumber] = useState("");
   const [booster, setBooster] = useState("");
@@ -12,21 +9,14 @@ const OrderForm = () => {
   const [price, setPrice] = useState("");
   const [selfplayPilot, setSelfplayPilot] = useState("");
   const [commentary, setCommentary] = useState("");
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState(() => {
+    const savedOrders = localStorage.getItem("orders");
+    return savedOrders ? JSON.parse(savedOrders) : [];
+  });
 
   useEffect(() => {
-    const unsubscribe = db.collection("orders").onSnapshot((snapshot) => {
-      const updatedOrders = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setOrders(updatedOrders);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+    localStorage.setItem("orders", JSON.stringify(orders));
+  }, [orders]);
 
   const handleOrderNumberChange = (event) => {
     setOrderNumber(event.target.value);
@@ -70,15 +60,7 @@ const OrderForm = () => {
       completed: false,
     };
 
-    db.collection("orders")
-      .add(newOrder)
-      .then((docRef) => {
-        console.log("Данные успешно добавлены в Cloud Firestore");
-        console.log("ID нового документа:", docRef.id);
-      })
-      .catch((error) => {
-        console.error("Ошибка при добавлении данных:", error);
-      });
+    setOrders([...orders, newOrder]);
 
     setOrderNumber("");
     setBooster("");
@@ -90,39 +72,16 @@ const OrderForm = () => {
   };
 
   const handleComplete = (index) => {
-    const orderId = orders[index].id;
-    const orderToUpdate = db.collection("orders").doc(orderId);
-    orderToUpdate
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          const completed = doc.data().completed;
-          orderToUpdate.update({ completed: !completed });
-        } else {
-          console.log("Документ не найден!");
-        }
-      })
-      .catch((error) => {
-        console.error(
-          "Ошибка при обновлении статуса выполнения заказа:",
-          error
-        );
-      });
+    const updatedOrders = [...orders];
+    updatedOrders[index].completed = !updatedOrders[index].completed;
+    setOrders(updatedOrders);
   };
 
- const handleDelete = (index) => {
-   const orderId = orders[index].id;
-   db
-     .collection("orders")
-     .doc(orderId)
-     .delete()
-     .then(() => {
-       console.log("Заказ успешно удален из Cloud Firestore");
-     })
-     .catch((error) => {
-       console.error("Ошибка при удалении заказа:", error);
-     });
- };
+  const handleDelete = (index) => {
+    const updatedOrders = [...orders];
+    updatedOrders.splice(index, 1);
+    setOrders(updatedOrders);
+  };
 
   return (
     <div className={css.orderBlock}>
@@ -202,7 +161,7 @@ const OrderForm = () => {
             <thead>
               <tr>
                 <th>Order number</th>
-                <th>Booster</th>
+                <th>Booster </th>
                 <th>Price for a booster</th>
                 <th>Price</th>
                 <th>Level</th>
@@ -215,7 +174,7 @@ const OrderForm = () => {
             <tbody>
               {orders.map((order, index) => (
                 <tr
-                  key={order.id}
+                  key={index}
                   className={order.completed ? css.completed : ""}
                 >
                   <td>{order.orderNumber}</td>

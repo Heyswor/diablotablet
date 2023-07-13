@@ -1,52 +1,60 @@
 import React, { useState, useEffect } from "react";
 import OrderForm from "../Tirandill/TabletComponent/infotablet";
 import css from "./Tirandill.module.css";
+import { auth } from "../../services/firebaseAuth";
 
 const Tirandill = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    // Проверка состояния входа при загрузке страницы
     const loggedInStatus = localStorage.getItem("isLoggedIn");
     if (loggedInStatus === "true") {
       setIsLoggedIn(true);
     }
   }, []);
 
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
-  };
-
-  const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-  };
-
-  const handleLogin = (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
 
-    // Проверка логина и пароля
-    if (username === "admin" && password === "admin") {
+    try {
+      // Вызов функции для аутентификации пользователя через Firebase
+      await auth.signInWithEmailAndPassword(
+        event.target.login.value,
+        event.target.password.value
+      );
       setIsLoggedIn(true);
       localStorage.setItem("isLoggedIn", "true");
-    } else {
-      alert("Неверный логин или пароль!");
+    } catch (error) {
+      alert(`Ошибка при входе: ${error.message}`);
     }
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    setUsername("");
-    setPassword("");
     localStorage.setItem("isLoggedIn", "false");
+  };
+
+  const handleSignUp = async (event) => {
+    event.preventDefault();
+
+    try {
+      // Вызов функции для регистрации пользователя через Firebase
+      await auth.createUserWithEmailAndPassword(
+        event.target.login.value,
+        event.target.password.value
+      );
+      alert("Регистрация успешна!");
+      event.target.reset();
+    } catch (error) {
+      alert(`Ошибка при регистрации: ${error.message}`);
+    }
   };
 
   return (
     <div className={css.tirBlock}>
       {isLoggedIn ? (
         <div className={css.tirBlock}>
-          <h1 className={css.header}>Wellcome, Master!</h1>
+          <h1 className={css.header}>Welcome, Master!</h1>
           <form className={css.blockForm}>
             <button onClick={handleLogout}>Exit</button>
           </form>
@@ -55,21 +63,17 @@ const Tirandill = () => {
         </div>
       ) : (
         <div>
-          <h1 className={css.header}>Login</h1>
+          <h1 className={css.header}>Login / Register</h1>
           <form onSubmit={handleLogin} className={css.blockForm}>
-            <input
-              type="text"
-              placeholder="login"
-              value={username}
-              onChange={handleUsernameChange}
-            />
-            <input
-              type="password"
-              placeholder="password"
-              value={password}
-              onChange={handlePasswordChange}
-            />
+            <input type="text" name="login" placeholder="login" />
+            <input type="password" name="password" placeholder="password" />
             <button type="submit">Login</button>
+          </form>
+          <form onSubmit={handleSignUp} className={css.blockForm}>
+            <h2>Register</h2>
+            <input type="text" name="login" placeholder="login" />
+            <input type="password" name="password" placeholder="password" />
+            <button type="submit">Register</button>
           </form>
         </div>
       )}
