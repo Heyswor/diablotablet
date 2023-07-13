@@ -59,7 +59,7 @@ const Tirandill = () => {
             <button onClick={handleLogout}>Exit</button>
           </form>
 
-          <OrderForm />
+          <OrderForm isLoggedIn={isLoggedIn} />
         </div>
       ) : (
         <div>

@@ -15,7 +15,7 @@ function App() {
           Glyph Calculator
         </NavLink>
         <NavLink to="/admin" className="navLink" activeClassName="active">
-          Admin page{" "}
+          Admin page
         </NavLink>
       </nav>
       <Routes>

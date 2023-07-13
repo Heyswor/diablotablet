@@ -3,8 +3,10 @@ import css from "./Tablet.module.css";
 
 import "firebase/compat/firestore";
 import db from "../../../services/firebase";
+import { auth } from "../../../services/firebaseAuth"; //
 
-const OrderForm = () => {
+
+const OrderForm = ({ isLoggedIn }) => {
   const [orderNumber, setOrderNumber] = useState("");
   const [booster, setBooster] = useState("");
   const [levelRange, setLevelRange] = useState("");
@@ -15,18 +17,25 @@ const OrderForm = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = db.collection("orders").onSnapshot((snapshot) => {
-      const updatedOrders = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setOrders(updatedOrders);
-    });
+   if (!isLoggedIn || !auth.currentUser) {
+     // Пользователь не аутентифицирован, не выполняем запрос к базе данных
+     return;
+   }
+    const unsubscribe = db
+      .collection("orders")
+      .where("userId", "==", auth.currentUser.uid)
+      .onSnapshot((snapshot) => {
+        const updatedOrders = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setOrders(updatedOrders);
+      });
 
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [isLoggedIn]);
 
   const handleOrderNumberChange = (event) => {
     setOrderNumber(event.target.value);
@@ -59,7 +68,10 @@ const OrderForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    const userId = auth.currentUser.uid; // Получаем идентификатор текущего пользователя
+
     const newOrder = {
+      userId,
       orderNumber,
       booster,
       levelRange,
@@ -110,19 +122,18 @@ const OrderForm = () => {
       });
   };
 
- const handleDelete = (index) => {
-   const orderId = orders[index].id;
-   db
-     .collection("orders")
-     .doc(orderId)
-     .delete()
-     .then(() => {
-       console.log("Заказ успешно удален из Cloud Firestore");
-     })
-     .catch((error) => {
-       console.error("Ошибка при удалении заказа:", error);
-     });
- };
+  const handleDelete = (index) => {
+    const orderId = orders[index].id;
+    db.collection("orders")
+      .doc(orderId)
+      .delete()
+      .then(() => {
+        console.log("Заказ успешно удален из Cloud Firestore");
+      })
+      .catch((error) => {
+        console.error("Ошибка при удалении заказа:", error);
+      });
+  };
 
   return (
     <div className={css.orderBlock}>
