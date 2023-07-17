@@ -5,22 +5,12 @@ import { auth } from "../../services/firebaseAuth";
 
 const OrderTablet = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        setIsLoggedIn(true);
-        setUser(user);
-      } else {
-        setIsLoggedIn(false);
-        setUser(null);
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
+    const loggedInStatus = localStorage.getItem("isLoggedIn");
+    if (loggedInStatus === "true") {
+      setIsLoggedIn(true);
+    }
   }, []);
 
   const handleLogin = async (event) => {
@@ -31,19 +21,23 @@ const OrderTablet = () => {
         event.target.login.value,
         event.target.password.value
       );
+      setIsLoggedIn(true);
+      localStorage.setItem("isLoggedIn", "true");
     } catch (error) {
       alert(`Ошибка при входе: ${error.message}`);
     }
   };
 
   const handleLogout = () => {
-    auth.signOut();
+    setIsLoggedIn(false);
+    localStorage.setItem("isLoggedIn", "false");
   };
 
   const handleSignUp = async (event) => {
     event.preventDefault();
 
     try {
+      // Вызов функции для регистрации пользователя через Firebase
       await auth.createUserWithEmailAndPassword(
         event.target.login.value,
         event.target.password.value
@@ -63,8 +57,8 @@ const OrderTablet = () => {
           <form className={css.blockForm}>
             <button onClick={handleLogout}>Exit</button>
           </form>
-          <OrderForm user={user} />{" "}
-          {/* Передача информации о текущем пользователе в OrderForm */}
+
+          <OrderForm />
         </div>
       ) : (
         <div>

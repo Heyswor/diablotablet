@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import css from "./Tablet.module.css";
-import "firebase/compat/firestore";
-import db from "../../../services/firebase";
+import { db } from "../../../services/firebase"; // Используйте обновленный путь к файлу firebase.js
 
-const OrderForm = () => {
+const OrderForm = ({ user }) => {
   const [orderNumber, setOrderNumber] = useState("");
   const [booster, setBooster] = useState("");
   const [levelRange, setLevelRange] = useState("");
@@ -17,18 +16,23 @@ const OrderForm = () => {
   const [editingOrder, setEditingOrder] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = db.collection("orders").onSnapshot((snapshot) => {
-      const updatedOrders = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setOrders(updatedOrders);
-    });
+    if (user) {
+      const unsubscribe = db
+        .collection("orders")
+        .where("userId", "==", user.uid)
+        .onSnapshot((snapshot) => {
+          const updatedOrders = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          setOrders(updatedOrders);
+        });
 
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [user]);
 
   const handleOrderNumberChange = (event) => {
     setOrderNumber(event.target.value);
@@ -74,6 +78,7 @@ const OrderForm = () => {
       selfplayPilot,
       commentary,
       completed: false,
+      userId: user.uid, // Добавление идентификатора пользователя к заказу
     };
 
     db.collection("orders")
@@ -159,6 +164,7 @@ const OrderForm = () => {
         console.error("Ошибка при обновлении заказа:", error);
       });
   };
+
   return (
     <div className={css.orderBlock}>
       <h1>Order Form</h1>
@@ -181,7 +187,6 @@ const OrderForm = () => {
             onChange={handleBoosterChange}
           />
         </div>
-
         <div>
           <label htmlFor="priceForBooster">Price for a booster:</label>
           <input
@@ -249,7 +254,7 @@ const OrderForm = () => {
                     <input
                       type="text"
                       value={boosterFilter}
-                      onChange={handleBoosterFilterChange}
+                      onChange={handleBoosterFilterChange} 
                       className={css.filterInpt}
                     />
                   )}
