@@ -1,11 +1,17 @@
 nav {
   display: flex;
-  gap: 10px;
+  gap: 30px;
+  margin-top: 10px;
+  margin-left: 20px;
 }
 
 .navLink {
+  
   text-decoration: none;
   color: black;
+  border: 2px solid black;
+  border-left: hidden;
+  border-radius: 5px;
 }
 
 .active {

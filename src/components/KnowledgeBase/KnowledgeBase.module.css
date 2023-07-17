@@ -1,0 +1,51 @@
+.header {
+  background-color: rgb(22, 19, 19);
+  height: 50px;
+  width: 100vw;
+  color: rgb(122, 4, 4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+ul {
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+
+}
+
+.links {
+  margin-left: 0;
+  list-style: none;
+  counter-reset: li;
+  font-family: calibri;
+}
+.links li {
+  padding: 10px 0;
+  position: relative;
+  left: 1.5em;
+  margin-bottom: 0.75em;
+  padding-left: 1em;
+  background: #E3DEDC;
+}
+.links li:before {
+  padding: 10px 0;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -1.5em;
+  width: 1.875em;
+  text-align: center;
+  color: red;
+  font-weight: bold;
+  background: black;
+  border-bottom-left-radius: 70em;
+  border-top-left-radius: 70em;
+  counter-increment: li;
+  content: counter(li);
+}
+.links a {
+    color: red;
+}
+.links a:visited {color: red;}

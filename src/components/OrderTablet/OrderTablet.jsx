@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import OrderForm from "../Tirandill/TabletComponent/infotablet";
-import css from "./Tirandill.module.css";
+import OrderForm from "./TabletComponent/Tablet";
+import css from "./OrderTablet.module.css";
 import { auth } from "../../services/firebaseAuth";
 
-const Tirandill = () => {
+const OrderTablet = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -17,7 +17,6 @@ const Tirandill = () => {
     event.preventDefault();
 
     try {
-      // Вызов функции для аутентификации пользователя через Firebase
       await auth.signInWithEmailAndPassword(
         event.target.login.value,
         event.target.password.value
@@ -81,4 +80,4 @@ const Tirandill = () => {
   );
 };
 
-export default Tirandill;
+export default OrderTablet;

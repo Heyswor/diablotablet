@@ -1,27 +1,32 @@
 import LevelCalculator from "./components/LevelCalculator/LevelCalculator";
 import GlyphCalc from "./components/GlyphCalc/GlyphCalc";
-import Tirandill from "./components/Tirandill/Tirandill";
+import OrderTablet from "./components/OrderTablet/OrderTablet";
 import "./App.css";
 import { Routes, Route, NavLink } from "react-router-dom";
+import { KnowledgeBase } from "./components/KnowledgeBase/KnowledgeBase";
 
 function App() {
   return (
     <div>
       <nav>
-        <NavLink to="/" className="navLink" activeClassName="active">
+        <NavLink to="/" className="navLink" activeclassname="active">
           LevelCalculator
         </NavLink>
-        <NavLink to="/glyphcalc" className="navLink" activeClassName="active">
+        <NavLink to="/glyphcalc" className="navLink" activeclassname="active">
           Glyph Calculator
         </NavLink>
-        <NavLink to="/admin" className="navLink" activeClassName="active">
-          Admin page{" "}
+        <NavLink to="/orders" className="navLink" activeclassname="active">
+          Orders
+        </NavLink>
+        <NavLink to="/kb" className="navLink" activeclassname="active">
+          Knowledge Base
         </NavLink>
       </nav>
       <Routes>
         <Route path="/" element={<LevelCalculator />} />
         <Route path="/glyphcalc" element={<GlyphCalc />} />
-        <Route path="/admin" element={<Tirandill />} />
+        <Route path="/orders" element={<OrderTablet />} />
+        <Route path="/kb" element={<KnowledgeBase />} />
       </Routes>
     </div>
   );

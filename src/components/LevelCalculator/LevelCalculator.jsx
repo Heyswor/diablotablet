@@ -9,7 +9,12 @@ const LevelCalculator = () => {
   const [timeInterval, setTimeInterval] = useState("");
   const [requiredExperience, setRequiredExperience] = useState("");
   const [requiredTime, setRequiredTime] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [keylvl, setKeylvl] = useState("");
+
+  const handleKeylvlChange = (e) => {
+    const { value } = e.target;
+    setKeylvl(value);
+  };
 
   const handleStartLevelChange = (event) => {
     const { value } = event.target;
@@ -31,6 +36,17 @@ const LevelCalculator = () => {
     setTimeInterval(value);
   };
 
+  const calculateMonstLvl = () => {
+    const baselvl = parseInt(54, 10);
+    const targetlvl = parseInt(keylvl, 10);
+    if (Number.isNaN(targetlvl)) {
+      return ""; // Возвращаем пустую строку, если keylvl не является числом
+    }
+
+    const calclvl = baselvl + targetlvl;
+    return calclvl;
+  };
+
   const recalculateRequiredValues = () => {
     const start = parseInt(startLevel, 10);
     const end = parseInt(endLevel, 10);
@@ -40,7 +56,6 @@ const LevelCalculator = () => {
 
     setRequiredExperience(requiredExperienceFormatted);
     setRequiredTime(requiredTimeFormatted);
-    setErrorMessage("");
 
     if (
       start <= end &&
@@ -70,17 +85,18 @@ const LevelCalculator = () => {
 
       setRequiredExperience(requiredExperience);
       setRequiredTime(formattedTime);
-      setErrorMessage("");
     } else {
       setRequiredExperience("");
       setRequiredTime("");
-      setErrorMessage("Fill in all the fields");
     }
   };
 
   useEffect(() => {
     recalculateRequiredValues();
-  }, [startLevel, endLevel, experiencePerTime, timeInterval]);
+  });
+  useEffect(() => {
+    calculateMonstLvl();
+  });
 
   return (
     <div>
@@ -126,6 +142,16 @@ const LevelCalculator = () => {
               className={css.calcInput}
             />
           </label>
+          <label className={css.calcLabel}>
+            Key level:
+            <input
+              type="number"
+              value={keylvl}
+              onChange={handleKeylvlChange}
+              className={css.calcInput}
+            />
+            
+          </label>
         </div>
         <div className={css.info}>
           <div className={css.infoResult}>
@@ -137,6 +163,9 @@ const LevelCalculator = () => {
 
             <div className={css.infoResultBlock}>
               <h3>Required Time: {requiredTime.toLocaleString()}</h3>
+            </div>
+            <div className={css.infoResultBlock}>
+              <h3>Monster Level: {calculateMonstLvl()}</h3>
             </div>
           </div>
         </div>

@@ -1,35 +1,31 @@
-import React, { useState, useEffect } from "react";
-import glyphLevelData from "./glevels.json";
-import nmdExp from "./nmdexp.json";
+import React, { useState, useEffect, useMemo } from "react";
+import glyphLevelData from "./jsons/glevels.json";
+import nmdExp from "./jsons/nmdexp.json";
 import css from "./GlyphCalc.module.css";
 
 const GlyphCalc = () => {
-  const [startGlyphLevel, setStartGlyphLevel] = useState("");
-  const [endGlyphLevel, setEndGlyphLevel] = useState("");
-  const [nmdLevel, setNmdLevel] = useState("");
+  const [formData, setFormData] = useState({
+    startGlyphLevel: "",
+    endGlyphLevel: "",
+    nmdLevel: "",
+  });
   const [requiredRuns, setRequiredRuns] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleStartGlyphLevel = (event) => {
-    const { value } = event.target;
-    setStartGlyphLevel(value);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
   };
 
-  const handleEndGlyphLevel = (event) => {
-    const { value } = event.target;
-    setEndGlyphLevel(value);
-  };
+  const { startGlyphLevel, endGlyphLevel, nmdLevel } = formData;
 
-  const handleNmdLevel = (event) => {
-    const { value } = event.target;
-    setNmdLevel(value);
-  };
+  const start = useMemo(() => parseInt(startGlyphLevel, 10), [startGlyphLevel]);
+  const end = useMemo(() => parseInt(endGlyphLevel, 10), [endGlyphLevel]);
+  const key = useMemo(() => parseInt(nmdLevel, 10), [nmdLevel]);
 
-  const calculateReqRuns = () => {
-    const start = parseInt(startGlyphLevel, 10);
-    const end = parseInt(endGlyphLevel, 10);
-    const key = parseInt(nmdLevel, 10);
-
+  useEffect(() => {
     if (start <= end && start >= 1 && end <= 21) {
       let totalExp = 0;
       let res = 1;
@@ -41,20 +37,15 @@ const GlyphCalc = () => {
       }
 
       if (nmdExp.hasOwnProperty(key)) {
-        res = Object.values(nmdExp)[key - 1];
+        res = nmdExp[key];
       }
 
       const requiredRuns = totalExp / res;
       setRequiredRuns(Math.ceil(requiredRuns));
     } else {
       setRequiredRuns("");
-      setErrorMessage("Fill in all the fields");
     }
-  };
-
-  useEffect(() => {
-    calculateReqRuns();
-  }, [startGlyphLevel, endGlyphLevel, nmdLevel]);
+  }, [start, end, key]);
 
   return (
     <div>
@@ -68,8 +59,9 @@ const GlyphCalc = () => {
             <input
               className={css.calcInput}
               type="number"
+              name="startGlyphLevel"
               value={startGlyphLevel}
-              onChange={handleStartGlyphLevel}
+              onChange={handleInputChange}
             />
           </label>
           <label className={css.calcLabel}>
@@ -77,8 +69,9 @@ const GlyphCalc = () => {
             <input
               className={css.calcInput}
               type="number"
+              name="endGlyphLevel"
               value={endGlyphLevel}
-              onChange={handleEndGlyphLevel}
+              onChange={handleInputChange}
             />
           </label>
           <label className={css.calcLabel}>
@@ -86,14 +79,20 @@ const GlyphCalc = () => {
             <input
               className={css.calcInput}
               type="number"
+              name="nmdLevel"
               value={nmdLevel}
-              onChange={handleNmdLevel}
+              onChange={handleInputChange}
             />
           </label>
         </div>
         <div className={css.info}>
           <div className={css.infoResultBlock}>
             <h3>Required Runs: {requiredRuns}</h3>
+          </div>
+        </div>
+        <div className={css.info}>
+          <div className={css.infoResultBlock}>
+            <h3>Required Time: {requiredRuns}</h3>
           </div>
         </div>
       </main>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import css from "./Tablet.module.css";
-
 import "firebase/compat/firestore";
 import db from "../../../services/firebase";
 
@@ -13,6 +12,8 @@ const OrderForm = () => {
   const [selfplayPilot, setSelfplayPilot] = useState("");
   const [commentary, setCommentary] = useState("");
   const [orders, setOrders] = useState([]);
+  const [boosterFilter, setBoosterFilter] = useState("");
+  const [showBoosterFilter, setShowBoosterFilter] = useState(false);
 
   useEffect(() => {
     const unsubscribe = db.collection("orders").onSnapshot((snapshot) => {
@@ -54,6 +55,10 @@ const OrderForm = () => {
 
   const handleCommentary = (event) => {
     setCommentary(event.target.value);
+  };
+
+  const handleBoosterFilterChange = (event) => {
+    setBoosterFilter(event.target.value);
   };
 
   const handleSubmit = (event) => {
@@ -110,19 +115,18 @@ const OrderForm = () => {
       });
   };
 
- const handleDelete = (index) => {
-   const orderId = orders[index].id;
-   db
-     .collection("orders")
-     .doc(orderId)
-     .delete()
-     .then(() => {
-       console.log("Заказ успешно удален из Cloud Firestore");
-     })
-     .catch((error) => {
-       console.error("Ошибка при удалении заказа:", error);
-     });
- };
+  const handleDelete = (index) => {
+    const orderId = orders[index].id;
+    db.collection("orders")
+      .doc(orderId)
+      .delete()
+      .then(() => {
+        console.log("Заказ успешно удален из Cloud Firestore");
+      })
+      .catch((error) => {
+        console.error("Ошибка при удалении заказа:", error);
+      });
+  };
 
   return (
     <div className={css.orderBlock}>
@@ -202,7 +206,22 @@ const OrderForm = () => {
             <thead>
               <tr>
                 <th>Order number</th>
-                <th>Booster</th>
+                <th>
+                  Booster{" "}
+                  <button
+                    onClick={() => setShowBoosterFilter(!showBoosterFilter)}
+                    className={css.filterBtn}
+                  >
+                    Filter
+                  </button>
+                  {showBoosterFilter && (
+                    <input
+                      type="text"
+                      value={boosterFilter}
+                      onChange={handleBoosterFilterChange}
+                    />
+                  )}
+                </th>
                 <th>Price for a booster</th>
                 <th>Price</th>
                 <th>Level</th>
@@ -213,30 +232,38 @@ const OrderForm = () => {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order, index) => (
-                <tr
-                  key={order.id}
-                  className={order.completed ? css.completed : ""}
-                >
-                  <td>{order.orderNumber}</td>
-                  <td>{order.booster}</td>
-                  <td>{order.priceForBooster}</td>
-                  <td>{order.price}</td>
-                  <td>{order.levelRange}</td>
-                  <td>{order.selfplayPilot}</td>
-                  <td>{order.commentary}</td>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={order.completed}
-                      onChange={() => handleComplete(index)}
-                    />
-                  </td>
-                  <td>
-                    <button onClick={() => handleDelete(index)}>Delete</button>
-                  </td>
-                </tr>
-              ))}
+              {orders
+                .filter((order) =>
+                  order.booster
+                    .toLowerCase()
+                    .includes(boosterFilter.toLowerCase())
+                )
+                .map((order, index) => (
+                  <tr
+                    key={order.id}
+                    className={order.completed ? css.completed : ""}
+                  >
+                    <td>{order.orderNumber}</td>
+                    <td>{order.booster}</td>
+                    <td>{order.priceForBooster}</td>
+                    <td>{order.price}</td>
+                    <td>{order.levelRange}</td>
+                    <td>{order.selfplayPilot}</td>
+                    <td>{order.commentary}</td>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={order.completed}
+                        onChange={() => handleComplete(index)}
+                      />
+                    </td>
+                    <td>
+                      <button onClick={() => handleDelete(index)}>
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
