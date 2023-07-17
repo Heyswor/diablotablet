@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/diablotablet/static/css/main.94f80a61.css",
-    "main.js": "/diablotablet/static/js/main.4340aacc.js",
+    "main.css": "/diablotablet/static/css/main.f89e7395.css",
+    "main.js": "/diablotablet/static/js/main.7526068c.js",
     "static/media/d4.jpg": "/diablotablet/static/media/d4.2d05760459a0e1318ce5.jpg",
     "index.html": "/diablotablet/index.html",
-    "main.94f80a61.css.map": "/diablotablet/static/css/main.94f80a61.css.map",
-    "main.4340aacc.js.map": "/diablotablet/static/js/main.4340aacc.js.map"
+    "main.f89e7395.css.map": "/diablotablet/static/css/main.f89e7395.css.map",
+    "main.7526068c.js.map": "/diablotablet/static/js/main.7526068c.js.map"
   },
   "entrypoints": [
-    "static/css/main.94f80a61.css",
-    "static/js/main.4340aacc.js"
+    "static/css/main.f89e7395.css",
+    "static/js/main.7526068c.js"
   ]
 }
